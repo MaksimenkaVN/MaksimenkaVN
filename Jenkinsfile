@@ -10,7 +10,7 @@ pipeline {
     
     agent {
         node { label "${agent}"
-        customWorkspace '/home/vasiliy/jenkins/WS'
+        customWorkspace "/home/vasiliy/jenkins/WS"
         }
     }
     
