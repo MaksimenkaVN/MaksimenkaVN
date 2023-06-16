@@ -1,40 +1,44 @@
+
 pipeline {
-    
     options {
         buildDiscarder(logRotator(numToKeepStr: '2'))
     }
-    
     parameters {
         choice choices: ['master', 'Ans1'], description: 'Select agent', name: 'agent'
     }
-    
     agent {
-        node { label "${agent}"
-        customWorkspace "/home/vasiliy/jenkins/WS"
-        }
+        label "${agent}"
     }
-    
+    tools {
+        maven '3.8.6'
+    }
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                dir('apps/hello-world-app') {
+                    sh "mvn -B -DskipTests clean package"
+                }
             }
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                dir('apps/hello-world-app') {
+                    sh "mvn test"
+                }
             }
         }
-        stage('Deploy') {
+        stage('Copy artifact') {
             steps {
-                echo 'Deploying....'
+                dir('apps/hello-world-app/target') {
+                    archiveArtifacts artifacts: 'my-app-1.0-SNAPSHOT.jar', followSymlinks: false
+                    sh "ls -la"
+                }
             }
         }
     }
-    
-    post { 
-        always { 
-            echo 'I will always say Hello again!'
+    post {
+        always {
+            cleanWs()
         }
     }
 }
