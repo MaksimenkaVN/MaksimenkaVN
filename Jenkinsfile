@@ -32,6 +32,19 @@ pipeline {
                 }                            
             }
         }        
+        stage('Create Image') {
+            steps {
+                dir("apps/${app}") {                    
+                  sh """
+                  mkdir target
+                  docker create --name ${app}
+                  docker cp ${app}:/app/target/my-app-1.0-SNAPSHOT.jar target/
+                  ls -la target/
+                  """
+                  // sh "docker run"
+                }                            
+            }
+        }
     }
     post {
         always {
