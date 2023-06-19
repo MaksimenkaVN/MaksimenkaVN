@@ -55,14 +55,12 @@ pipeline {
             }
         }
         stage('Publish') {
-            steps {       
-                withCredentials([sshUserPrivateKey(credentialsId: 'MaksimenkaVN_GitHub_AKey', usernameVariable: 'maksimenkavn')]) {        
+            steps {                
                 // withCredentials([usernamePassword(credentialsId: 'MaksimenkaGitAkey', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    sh """
-                    echo ${pass} | docker login ${dockerRegistry} -u ${user} --password-stdin
-                    docker push ${dockerRegistry}
-                    """
-                }                   
+                sh """
+                echo "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" | docker login ${dockerRegistry} -u maksimenkavn --password-stdin
+                docker push ${dockerRegistry}
+                """                                   
             }
         }  
     }
