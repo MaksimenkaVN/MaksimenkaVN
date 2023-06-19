@@ -1,5 +1,3 @@
-import groovy.json.JsonSlurperClassic
-
 pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '2'))
@@ -15,14 +13,10 @@ pipeline {
         stage('Prepare') {
             steps {
                 script {
-                    // json = readFile "services.json"
-                    // apps = new JsonSlurperClassic().parseTest(json)
-                    // print(apps)
                     app = "hello-world-app"
                     dockerRegistry = "ghcr.io"
                     dockerOwner = "maksimenkavn"
-                    dockerImageTag = "${dockerOwner}/${app}:${env.BUILD_NUMBER}"
-                    CR_PAT = "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"
+                    dockerImageTag = "${dockerOwner}/${app}:${env.BUILD_NUMBER}"                    
                 }
             }
         }
@@ -56,11 +50,13 @@ pipeline {
             }
         }
         stage('Publish') {
-            steps {                
-                sh """
-                echo ${CR_PAT} | docker login ghcr.io -u maksimenkavn --password-stdin                
-                docker push ${dockerRegistry}
-                """                                   
+            steps {   
+                withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'pass', usernameVariable: 'user')]) {
+                    sh """
+                    echo ${pass} | docker login -u ${user} --password-stdin                
+                    docker push ${dockerRegistry}
+                    """                                   
+                }                             
             }
         }  
     }
