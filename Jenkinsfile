@@ -40,15 +40,16 @@ pipeline {
                   docker create --name ${app} ${app}
                   docker cp ${app}:/app/target/my-app-1.0-SNAPSHOT.jar target/
                   ls -la target/
+                  docker rm ${app}
                   """
                   // sh "docker run"
                 }                            
             }
         }
     }
-    post {
-        always {
-            cleanWs()
-        }
-    }
+    //post {
+    //    always {
+    //       cleanWs()
+    //    }
+    //}
 }
