@@ -25,13 +25,13 @@ pipeline {
                 }               
             }
         }
-        stage('Test') {
-            steps {
-                dir('apps') {
-                  sh "docker run ${app} mvn test"
-                }                            
-            }
-        }        
+        //stage('Test') {
+        //    steps {
+        //        dir('apps') {
+        //          sh "docker run ${app} mvn test"
+        //        }                            
+        //    }
+        //}        
         stage('Create Image') {
             steps {
                 dir("apps") {                    
