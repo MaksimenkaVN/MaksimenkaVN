@@ -58,7 +58,7 @@ pipeline {
         stage('Publish') {
             steps {                
                 sh """
-                echo $CR_PAT | docker login ghcr.io -u maksimenkavn --password-stdin                
+                echo ${CR_PAT} | docker login ghcr.io -u maksimenkavn --password-stdin                
                 docker push ${dockerRegistry}
                 """                                   
             }
