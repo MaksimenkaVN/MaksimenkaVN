@@ -27,7 +27,9 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh "ls -la"
+                dir('apps') {
+                  sh "docker run ${app} mvn test"
+                }                            
             }
         }        
     }
