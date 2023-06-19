@@ -55,11 +55,12 @@ pipeline {
             }
         }
         stage('Publish') {
-            steps {                
-                // withCredentials([usernamePassword(credentialsId: 'MaksimenkaGitAkey', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                // echo "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" | docker login ${dockerRegistry} -u maksimenkavn --password-stdin
+            steps {
+                $CR_PAT = "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"
+                // withCredentials([usernamePassword(credentialsId: '', passwordVariable: 'pass', usernameVariable: 'user')]) {                
+                // echo {pass} | docker login -u maksimenkavn --password-stdin                
                 sh """
-                cat key.txt | docker login --username maksimenkavn --password-stdin ghcr.io                
+                echo $CR_PAT | docker login ghcr.io -u maksimenkavn --password-stdin                
                 docker push ${dockerRegistry}
                 """                                   
             }
