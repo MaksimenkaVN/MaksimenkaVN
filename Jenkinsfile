@@ -1,3 +1,4 @@
+import groovy.json.JsonSlurperClassic
 
 pipeline {
     options {
@@ -14,6 +15,9 @@ pipeline {
         stage('Prepare') {
             steps {
                 script {
+                    // json = readFile "services.json"
+                    // apps = new JsonSlurperClassic().parseTest(json)
+                    // print(apps)
                     app = "hello-world-app"
                     dockerRegistry = "ghcr.io"
                     dockerOwner = "maksimenkavn"
@@ -52,7 +56,7 @@ pipeline {
         }
         stage('Publish') {
             steps {               
-                withCredentials([usernamePassword(credentialsId: 'MaksimenkaVN', passwordVariable: 'pass', usernameVariable: 'user')]) {
+                withCredentials([usernamePassword(credentialsId: 'MaksimenkaGitAkey', passwordVariable: 'pass', usernameVariable: 'user')]) {
                     sh """
                     echo ${pass} | docker login ${dockerRegistry} -u ${user} --password-stdin
                     docker push ${dockerRegistry}
