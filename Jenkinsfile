@@ -17,7 +17,7 @@ pipeline {
                     app = "hello-world-app"
                     dockerRegistry = "ghcr.io"
                     dockerOwner = "MaksimenkaVN"
-                    dockerImageTag = "${dockerRegistry}/${dockerOwner}/${app}:${env.BUILD_NUMBER}"
+                    dockerImageTag = "${dockerOwner}/${app}:${env.BUILD_NUMBER}"
                 }
             }
         }
