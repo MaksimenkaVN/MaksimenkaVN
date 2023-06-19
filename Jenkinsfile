@@ -56,7 +56,7 @@ pipeline {
         }
         stage('Publish') {
             steps {
-                $CR_PAT = "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"
+                CR_PAT = "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"
                 // withCredentials([usernamePassword(credentialsId: '', passwordVariable: 'pass', usernameVariable: 'user')]) {                
                 // echo {pass} | docker login -u maksimenkavn --password-stdin                
                 sh """
