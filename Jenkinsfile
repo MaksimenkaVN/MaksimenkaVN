@@ -34,22 +34,23 @@ pipeline {
         }        
         stage('Create Image') {
             steps {
-                dir("apps/${app}") {                    
+                dir("apps") {                    
                   sh """
-                  mkdir target
+                  mkdir ${app}/target
                   docker create --name ${app} ${app}
-                  docker cp ${app}:/app/target/my-app-1.0-SNAPSHOT.jar target/
-                  ls -la target/
-                  docker rm ${app}
-                  """
-                  // sh "docker run"
+                  docker cp ${app}:/app/target/my-app-1.0-SNAPSHOT.jar ${app}/target/
+                  ls -la ${app}/target/
+                  docker rm -f ${app}
+                  docker rmi -f ${app}
+                  docker build -t ${app} -f ${app}/Dockerfile-jenkins-create ${app}
+                  """                  
                 }                            
             }
         }
     }
-    //post {
-    //    always {
-    //       cleanWs()
-    //    }
-    //}
+    post {
+        always {
+           cleanWs()
+        }
+    }
 }
