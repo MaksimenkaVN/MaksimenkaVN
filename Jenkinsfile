@@ -55,8 +55,9 @@ pipeline {
             }
         }
         stage('Publish') {
-            steps {               
-                withCredentials([usernamePassword(credentialsId: 'MaksimenkaGitAkey', passwordVariable: 'pass', usernameVariable: 'user')]) {
+            steps {       
+                withCredentials([sshUserPrivateKey(credentialsId: 'MaksimenkaVN_GitHub_AKey', usernameVariable: 'maksimenkavn')]) {        
+                // withCredentials([usernamePassword(credentialsId: 'MaksimenkaGitAkey', passwordVariable: 'pass', usernameVariable: 'user')]) {
                     sh """
                     echo ${pass} | docker login ${dockerRegistry} -u ${user} --password-stdin
                     docker push ${dockerRegistry}
