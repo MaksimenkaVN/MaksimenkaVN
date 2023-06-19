@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Build') {
             steps {                
-               dir('apps/hello-world-app') {
+               dir('apps') {
                   sh "docker build -t ${app} -f ${app}/Dockerfile-jenkins-build ${app}"
                 }               
             }
