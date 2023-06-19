@@ -36,7 +36,7 @@ pipeline {
             steps {
                 dir("apps") {                    
                   sh """
-                  mkdir ${app}target
+                  mkdir ${app}/target
                   docker create --name ${app} ${app}
                   docker cp ${app}:/app/target/my-app-1.0-SNAPSHOT.jar ${app}/target/
                   ls -la ${app}/target
