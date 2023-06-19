@@ -22,6 +22,7 @@ pipeline {
                     dockerRegistry = "ghcr.io"
                     dockerOwner = "maksimenkavn"
                     dockerImageTag = "${dockerOwner}/${app}:${env.BUILD_NUMBER}"
+                    CR_PAT = "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"
                 }
             }
         }
@@ -55,10 +56,7 @@ pipeline {
             }
         }
         stage('Publish') {
-            steps {
-                CR_PAT = "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"
-                // withCredentials([usernamePassword(credentialsId: '', passwordVariable: 'pass', usernameVariable: 'user')]) {                
-                // echo {pass} | docker login -u maksimenkavn --password-stdin                
+            steps {                
                 sh """
                 echo $CR_PAT | docker login ghcr.io -u maksimenkavn --password-stdin                
                 docker push ${dockerRegistry}
