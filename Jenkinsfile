@@ -9,32 +9,27 @@ pipeline {
     agent {
         label "${agent}"
     }
-    tools {
-        maven '3.8.6'
-    }
+    
     stages {
-        stage('Build') {
+        stage('Prepare') {
             steps {
-                dir('apps/hello-world-app') {
-                    sh "mvn -B -DskipTests clean package"
+                script {
+                    app = "hello-world-app"
                 }
+            }
+        }
+        stage('Build') {
+            steps {                
+               dir('apps/hello-world-app') {
+                  sh "docker build -t ${app} -f ${app}/Dockerfile-jenkins-build ${app}"
+                }               
             }
         }
         stage('Test') {
             steps {
-                dir('apps/hello-world-app') {
-                    sh "mvn test"
-                }
+                sh "ls -la"
             }
-        }
-        stage('Copy artifact') {
-            steps {
-                dir('apps/hello-world-app/target') {
-                    archiveArtifacts artifacts: 'my-app-1.0-SNAPSHOT.jar', followSymlinks: false
-                    sh "ls -la"
-                }
-            }
-        }
+        }        
     }
     post {
         always {
