@@ -57,8 +57,9 @@ pipeline {
         stage('Publish') {
             steps {                
                 // withCredentials([usernamePassword(credentialsId: 'MaksimenkaGitAkey', passwordVariable: 'pass', usernameVariable: 'user')]) {
+                // echo "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" | docker login ${dockerRegistry} -u maksimenkavn --password-stdin
                 sh """
-                echo "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" | docker login ${dockerRegistry} -u maksimenkavn --password-stdin
+                cat key.txt | docker login --username maksimenkavn --password-stdin ghcr.io                
                 docker push ${dockerRegistry}
                 """                                   
             }
