@@ -15,6 +15,9 @@ pipeline {
             steps {
                 script {
                     app = "hello-world-app"
+                    dockerRegistry = "ghcr.io"
+                    dockerOwner = "MaksimenkaVN"
+                    dockerImageTag = "${dockerRegistry}/${dockerOwner}/${app}:${env.BUILD_NUMBER}"
                 }
             }
         }
@@ -25,13 +28,13 @@ pipeline {
                 }               
             }
         }
-        //stage('Test') {
-        //    steps {
-        //        dir('apps') {
-        //          sh "docker run ${app} mvn test"
-        //        }                            
-        //    }
-        //}        
+        stage('Test') {
+            steps {
+                dir('apps') {
+                  sh "docker run ${app} mvn test"
+                }                            
+            }
+        }        
         stage('Create Image') {
             steps {
                 dir("apps") {                    
@@ -42,11 +45,21 @@ pipeline {
                   ls -la ${app}/target
                   docker rm -f ${app}
                   docker rmi -f ${app}
-                  docker build -t ${app} -f ${app}/Dockerfile-jenkins-create ${app}
+                  docker build -t ${dockerImageTag} -f ${app}/Dockerfile-jenkins-create ${app}
                   """                  
                 }                            
             }
         }
+        stage('Publish') {
+            steps {               
+                withCredentials([usernamePassword(credentialsId: 'MaksimenkaVN', passwordVariable: 'pass', usernameVariable: 'user')]) {
+                    sh """
+                    echo ${pass} | docker login ${dockerRegistry} -u ${user} --password-stdin
+                    docker push ${dockerRegistry}
+                    """
+                }                   
+            }
+        }  
     }
     post {
         always {
